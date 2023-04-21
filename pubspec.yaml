@@ -1,6 +1,6 @@
 name: flutter_adaptive_layout
 description: Adaptive layout builder - you can easily build custom page layout that would depend on a screen size to choose the correct widget
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/nerdy-pro/flutter-adaptive-layout
 
 environment:
