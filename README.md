@@ -1,5 +1,8 @@
 # flutter_adaptive_layout
 
+![Pub Version](https://img.shields.io/pub/v/flutter_adaptive_layout)
+![GitHub](https://img.shields.io/github/license/nerdy-pro/flutter-adaptive-layout)
+
 A convenient way to implement screen-size-driven layouts for your widgets.
 
 ## Features
