@@ -1,39 +1,91 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+# flutter_adaptive_layout
+A convenient way to implement screen-size-driven layouts for your widgets.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- extracts device's screen size
+- applies provided (or overriden) breakpoints for the screen size
+- renders a provided layout variant for the extracted screen size 
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+- install the library
+```shell
+flutter pub add flutter_adaptive_layout
+```
+- import the library
+```dart
+import 'package:flutter_adaptive_layout/flutter_adaptive_layout.dart';
+```
+- wrap your widget with an `AdaptiveLayout` builder
+```dart
+Widget build(BuildContext context) {
+  return AdaptiveLayout(
+    smallBuilder: (context, child) => child!,
+    mediumBuilder: (context, child) =>
+        Center(
+          child: Material(
+            color: Colors.white,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints.tight(const Size.square(400)),
+              child: child,
+            ),
+          ),
+        ),
+    largeBuilder: (context, child) =>
+        Center(
+          child: Material(
+            color: Colors.white,
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ConstrainedBox(
+              constraints: BoxConstraints.tight(const Size.square(600)),
+              child: child,
+            ),
+          ),
+        ),
+    child: const MyHomePage(),
+  );
+}
+```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Working example can be found in [/example](https://github.com/nerdy-pro/flutter-adaptive-layout/tree/main/example) directory
+
+Default breakpoints are set to `400` for small-medium screens and `600` for medium-large screens.
+You optionally can change these by providing `smallBreakpoint` and `mediumBreakpoint` variables in `BreakpointQualifier` for an `AdaptiveLayout`
 
 ```dart
-const like = 'sample';
+Widget build(BuildContext context) {
+  return AdaptiveLayout(
+    qualifier: BreakpointsQualifier(
+      smallBreakpoint: 300,
+      mediumBreakpoint: 700,
+    ),
+    smallBuilder: ...,
+    mediumBuilder: ...,
+    largeBuilder: ...,
+    child: ...,
+  );
+}
 ```
 
-## Additional information
+Or instead you also can implement your own `ScreenSizeQualifier`.
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+Also you can override the default breakpoints by wrapping your widget tree with an `BreakpointsSetting` instance:
+```dart
+Widget build(BuildContext context) {
+  return BreakpointsSetting(
+    smallScreenBreakpoint: 200,
+    mediumScreenBreakpoint: 500,
+    child: MaterialApp(...),
+  );
+}
+```
