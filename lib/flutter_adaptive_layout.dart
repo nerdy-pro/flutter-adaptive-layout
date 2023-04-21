@@ -1,7 +1,6 @@
 library flutter_adaptive_layout;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:flutter_adaptive_layout/layout/adaptive_layout.dart';
+export 'package:flutter_adaptive_layout/qualifiers/breakpoints_qualifier.dart';
+export 'package:flutter_adaptive_layout/qualifiers/screen_size_qualifier.dart';
+export 'package:flutter_adaptive_layout/screen_size/screen_size.dart';
