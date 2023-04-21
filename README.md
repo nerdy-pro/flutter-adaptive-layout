@@ -10,9 +10,9 @@ A convenient way to implement screen-size-driven layouts for your widgets.
 
 ## Gallery
 
-| iPhone 14                         | iPad Mini                         | iPad Pro 12"                                |
-|-----------------------------------|-----------------------------------|---------------------------------------------|
-| ![iPhone 14](./img/iphone_14.png) | ![iPad Mini](./img/ipad_mini.png) | ![iPad Pro 12 inch](./img/ipad_12_inch.png) |
+| iPhone 14                                                                                      | iPad Mini                                                                                      | iPad Pro 12"                                                                                             |
+|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| ![iPhone 14](https://github.com/nerdy-pro/flutter-adaptive-layout/blob/main/img/iphone_14.png) | ![iPad Mini](https://github.com/nerdy-pro/flutter-adaptive-layout/blob/main/img/ipad_mini.png) | ![iPad Pro 12 inch](https://github.com/nerdy-pro/flutter-adaptive-layout/blob/main/img/ipad_12_inch.png) |
 
 ## Getting started
 

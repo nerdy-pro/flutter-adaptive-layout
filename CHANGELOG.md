@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Fixed gallery in `README.md`
+
 ## 1.0.1
 
 * Added flutter docs
