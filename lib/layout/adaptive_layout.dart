@@ -37,7 +37,8 @@ class AdaptiveLayout extends StatelessWidget {
         break;
     }
     if (result == null) {
-      throw Exception('Either a builder or child for screen size of $screenSize should return a value');
+      throw Exception(
+          'Either a builder or child for screen size of $screenSize should return a value');
     }
     return result;
   }

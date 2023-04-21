@@ -19,8 +19,12 @@ class BreakpointsQualifier extends ScreenSizeQualifier {
     final shortestSide = MediaQuery.of(context).size.shortestSide;
     final breakpoints = BreakpointsSetting._maybeOf(context);
 
-    final smallBreakpoint = this.smallBreakpoint ?? breakpoints?.smallScreenBreakpoint ?? _defaultSmallBreakpoint;
-    final mediumBreakpoint = this.mediumBreakpoint ?? breakpoints?.mediumScreenBreakpoint ?? _defaultMediumBreakpoint;
+    final smallBreakpoint = this.smallBreakpoint ??
+        breakpoints?.smallScreenBreakpoint ??
+        _defaultSmallBreakpoint;
+    final mediumBreakpoint = this.mediumBreakpoint ??
+        breakpoints?.mediumScreenBreakpoint ??
+        _defaultMediumBreakpoint;
 
     if (shortestSide <= smallBreakpoint) {
       return ScreenSize.small;
