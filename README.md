@@ -258,7 +258,7 @@ Issues and pull requests are welcome on [GitHub](https://github.com/nerdy-pro/fl
 
 ## License
 
-BSD 3-Clause. See [LICENSE](https://github.com/nerdy-pro/flutter-adaptive-layout/blob/main/LICENSE).
+MIT © [Nerdy Pro](https://nerdy.pro). See [LICENSE](https://github.com/nerdy-pro/flutter-adaptive-layout/blob/main/LICENSE).
 
 ## About
 
