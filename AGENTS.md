@@ -65,4 +65,16 @@ Note that `AdaptiveLayout` constructs a fresh `BreakpointsQualifier()` on every 
 - Imports inside `lib/` use absolute `package:flutter_adaptive_layout/...` paths, not relative ones. Match that.
 - Every public member carries a `///` doc comment referencing related types in `[Brackets]` — these render on pub.dev, so new public API needs them.
 - A user-visible change means four coordinated edits, as the git history shows: the code, a new section at the top of `CHANGELOG.md`, a `version:` bump in `pubspec.yaml`, and the matching snippet in `README.md`.
-- README image links point at raw GitHub URLs under `img/` because pub.dev cannot resolve repo-relative paths.
+- README image links point at `raw.githubusercontent.com` URLs pinned to a release tag. pub.dev cannot resolve repo-relative paths, and a `blob/` URL serves HTML rather than image bytes — both forms shipped broken in earlier releases.
+
+## Releasing
+
+Tags are `vX.Y.Z` and must equal `pubspec.yaml`'s `version:`; `.github/workflows/publish.yml` fails the release if they disagree.
+
+1. Bump `version:` in `pubspec.yaml` and add a `## X.Y.Z` section at the top of `CHANGELOG.md`.
+2. Update the `^X.Y.Z` install snippet in `README.md`.
+3. Repoint the three gallery image URLs in `README.md` to the new tag. Skipping this leaves the published page showing the previous release's screenshots.
+4. Commit, then tag `vX.Y.Z` and push the tag.
+5. Publish a GitHub release for that tag. `publish.yml` verifies the tag against `pubspec.yaml`, re-runs analysis and tests, and publishes to pub.dev.
+
+The workflow authenticates via OIDC, so pub.dev's Admin → Automated publishing must be enabled for this repository with tag pattern `v{{version}}`. It also runs from the workflow file present at the tagged commit, so a tag predating a workflow change uses the old file.
