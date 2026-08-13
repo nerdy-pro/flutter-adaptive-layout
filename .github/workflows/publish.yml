@@ -1,0 +1,80 @@
+name: Publish
+
+# The release event has no tag filter, so the vX.Y.Z shape is enforced by the
+# first step rather than by the trigger.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  # Required for pub.dev's OIDC authentication. Without it the publish step
+  # fails with a credentials error.
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to pub.dev
+    runs-on: ubuntu-latest
+
+    steps:
+      # For a release event the default ref is the commit the tag points at,
+      # so this checks out exactly what is being released.
+      - name: Check out the released commit
+        uses: actions/checkout@v4
+
+      - name: Verify tag matches pubspec.yaml version
+        env:
+          # Passed through the environment rather than interpolated into the
+          # script body: a tag name is user-supplied input, and `${{ }}` inside
+          # `run:` is a shell injection vector.
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+
+          if ! printf '%s' "$TAG" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Release tag '$TAG' is not of the form vX.Y.Z."
+            exit 1
+          fi
+
+          version="$(awk '/^version:/ {print $2; exit}' pubspec.yaml)"
+
+          echo "release tag  : $TAG"
+          echo "pubspec.yaml : $version"
+
+          if [ "$TAG" != "v$version" ]; then
+            echo "::error::Tag '$TAG' does not match pubspec.yaml version '$version' (expected 'v$version'). Bump pubspec.yaml or retag."
+            exit 1
+          fi
+
+          echo "Tag and pubspec.yaml agree on $version."
+
+      # Obtains the short-lived OIDC token pub.dev exchanges for publish rights.
+      - name: Set up Dart (pub.dev authentication)
+        uses: dart-lang/setup-dart@v1
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Kept in step with ci.yml so goldens are compared against the same
+          # toolchain that generated them.
+          flutter-version: 3.44.9
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Same gates as ci.yml — a release must not ship code that a pull request
+      # would have rejected.
+      - name: Analyze
+        run: flutter analyze lib test
+
+      - name: Run tests
+        run: flutter test
+
+      - name: Validate package
+        run: flutter pub publish --dry-run
+
+      - name: Publish
+        run: flutter pub publish --force
