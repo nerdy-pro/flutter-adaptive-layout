@@ -20,7 +20,7 @@ There is no test directory for the package itself, and no CI. `example/test/widg
 
 ### Known pre-existing failure
 
-`example/lib/home_page.dart:61` uses `TextTheme.headline4`, removed from Flutter after this repo was last touched. Both `flutter analyze` and `cd example && flutter test` fail on it today (analyze: 1 error; test: compilation failure). This is unrelated to any change you make — do not assume your edit broke the build, and fix it separately (`headlineMedium`) if asked. Similarly, `pubspec.yaml` still pins `sdk: '>=2.18.5 <3.0.0'` while current toolchains ship Dart 3.x.
+`example/lib/home_page.dart:61` uses `TextTheme.headline4`, removed from Flutter after this repo was last touched. Both `flutter analyze` and `cd example && flutter test` fail on it today (analyze: 1 error; test: compilation failure). This is unrelated to any change you make — do not assume your edit broke the build, and fix it separately (`headlineMedium`) if asked. `flutter analyze lib` is clean and is the reliable signal for changes to the package itself.
 
 ## Architecture
 

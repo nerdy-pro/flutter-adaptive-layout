@@ -248,7 +248,7 @@ The example app rendered at three screen sizes:
 
 | Requirement | Version              |
 |-------------|----------------------|
-| Dart SDK    | `>=2.18.5 <3.0.0`    |
+| Dart SDK    | `>=2.18.5 <4.0.0`    |
 | Flutter     | `>=1.17.0`           |
 | Platforms   | iOS, Android, web, macOS, Windows, Linux |
 
