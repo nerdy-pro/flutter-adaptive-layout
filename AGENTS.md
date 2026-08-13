@@ -18,7 +18,9 @@ cd example && flutter run     # the only runnable app in the repo
 flutter pub publish --dry-run
 ```
 
-There is no CI. `example/test/widget_test.dart` is the unmodified Flutter counter template test and is not part of the package's own suite.
+`example/test/widget_test.dart` is the unmodified Flutter counter template test and is not part of the package's own suite.
+
+CI (`.github/workflows/ci.yml`) runs `flutter analyze lib test` and `flutter test` on pull requests targeting `main`, on `ubuntu-latest` with Flutter pinned to 3.44.9. The pin exists to keep goldens stable — bump it only alongside regenerated goldens.
 
 ## Testing
 
@@ -31,7 +33,7 @@ Constraints the fixtures deliberately obey — preserve them when adding cases:
 - **Every golden must be byte-unique.** Two identical goldens mean a case is asserting nothing — this already caught an override test whose breakpoints did not actually reclassify the surface. Check with `md5 -q test/goldens/*.png | sort -u | wc -l`.
 - Surface size is set via `tester.view.physicalSize` with `devicePixelRatio = 1.0` and `addTearDown(tester.view.reset)`.
 
-Goldens are rendered by the host's Skia build, so they are committed as the reference and may differ slightly on another platform. Regenerate with `--update-goldens` only when a layout change is intended, and eyeball the resulting PNGs before committing.
+Goldens are rendered by the host's Skia build, so they are committed as the reference and may differ on another platform. Regenerate with `--update-goldens` only when a layout change is intended, and eyeball the resulting PNGs before committing. If CI reports a golden mismatch that does not reproduce locally, download the `golden-failures` artifact to see the diff — and treat it as a platform difference to fix in the workflow, not a reason to regenerate against Linux output.
 
 ### Known pre-existing failure
 
