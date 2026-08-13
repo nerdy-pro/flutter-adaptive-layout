@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+# Superseded runs on the same PR are pointless; cancel them.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Analyze & test
+    # Golden images are host-rendered. They were generated on macOS, but the
+    # fixtures are deliberately text-free solid rectangles, which is the case
+    # least likely to differ between platforms. If goldens ever fail here while
+    # passing locally, switch this to macos-latest rather than regenerating.
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # Pinned deliberately: an unpinned toolchain is the most likely cause
+          # of golden drift. Bump this together with any regenerated goldens.
+          flutter-version: 3.44.9
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Scoped to the package. A repo-wide `flutter analyze` also covers
+      # example/, which has a pre-existing TextTheme.headline4 error unrelated
+      # to the package; widen this once that is fixed.
+      - name: Analyze
+        run: flutter analyze lib test
+
+      - name: Run tests
+        run: flutter test
+
+      # Flutter writes the actual/expected/diff PNGs next to the test on a
+      # golden mismatch. Without this they are lost with the runner.
+      - name: Upload golden failures
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures
+          path: test/**/failures/**
+          if-no-files-found: ignore
+          retention-days: 7

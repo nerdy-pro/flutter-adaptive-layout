@@ -9,14 +9,31 @@ Guidance for coding agents working in this repository.
 ## Commands
 
 ```shell
-flutter pub get            # from the root; also resolves example/
-flutter analyze            # analyzes both the package and example/
-cd example && flutter run  # the only runnable app in the repo
-cd example && flutter test # the only test suite (default counter smoke test)
+flutter pub get               # from the root; also resolves example/
+flutter analyze lib test      # clean today; the reliable signal for package changes
+flutter test                  # golden tests for AdaptiveLayout
+flutter test -n "<name>"      # a single case
+flutter test --update-goldens # rewrite test/goldens/*.png after an intentional change
+cd example && flutter run     # the only runnable app in the repo
 flutter pub publish --dry-run
 ```
 
-There is no test directory for the package itself, and no CI. `example/test/widget_test.dart` is the unmodified Flutter counter template test; run a single case with `flutter test test/widget_test.dart -n "<name>"`.
+`example/test/widget_test.dart` is the unmodified Flutter counter template test and is not part of the package's own suite.
+
+CI (`.github/workflows/ci.yml`) runs `flutter analyze lib test` and `flutter test` on pull requests targeting `main`, on `ubuntu-latest` with Flutter pinned to 3.44.9. The pin exists to keep goldens stable — bump it only alongside regenerated goldens.
+
+## Testing
+
+`test/adaptive_layout_golden_test.dart` is the whole suite: nine golden images covering the three default screen sizes, rotation invariance, both inclusive breakpoint boundaries, a `BreakpointsQualifier` override, a `BreakpointsSetting` override, and the fallback to a bare `child`.
+
+Constraints the fixtures deliberately obey — preserve them when adding cases:
+
+- **No text and no Material theming.** Layouts are solid colours only. Glyph metrics and theme defaults drift between Flutter versions and would make goldens fail for reasons unrelated to this package. The harness is `MediaQuery.fromView` + `Directionality`, not `MaterialApp`.
+- **Each screen size renders a visibly different shape** (full bleed / centred square / sidebar row), so a golden that picked the wrong `ScreenSize` fails on obvious pixels rather than subtle spacing.
+- **Every golden must be byte-unique.** Two identical goldens mean a case is asserting nothing — this already caught an override test whose breakpoints did not actually reclassify the surface. Check with `md5 -q test/goldens/*.png | sort -u | wc -l`.
+- Surface size is set via `tester.view.physicalSize` with `devicePixelRatio = 1.0` and `addTearDown(tester.view.reset)`.
+
+Goldens are rendered by the host's Skia build, so they are committed as the reference and may differ on another platform. Regenerate with `--update-goldens` only when a layout change is intended, and eyeball the resulting PNGs before committing. If CI reports a golden mismatch that does not reproduce locally, download the `golden-failures` artifact to see the diff — and treat it as a platform difference to fix in the workflow, not a reason to regenerate against Linux output.
 
 ### Known pre-existing failure
 
