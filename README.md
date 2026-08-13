@@ -49,7 +49,7 @@ Or add it to `pubspec.yaml` directly:
 
 ```yaml
 dependencies:
-  flutter_adaptive_layout: ^1.0.2
+  flutter_adaptive_layout: ^1.1.0
 ```
 
 Then import it:
@@ -242,7 +242,7 @@ The example app rendered at three screen sizes:
 
 | iPhone 14 (small) | iPad Mini (medium) | iPad Pro 12.9" (large) |
 |---|---|---|
-| ![flutter_adaptive_layout small screen layout on iPhone 14](https://raw.githubusercontent.com/nerdy-pro/flutter-adaptive-layout/main/img/iphone_14.png) | ![flutter_adaptive_layout medium screen layout on iPad Mini](https://raw.githubusercontent.com/nerdy-pro/flutter-adaptive-layout/main/img/ipad_mini.png) | ![flutter_adaptive_layout large screen layout on iPad Pro 12.9 inch](https://raw.githubusercontent.com/nerdy-pro/flutter-adaptive-layout/main/img/ipad_12_inch.png) |
+| ![flutter_adaptive_layout small screen layout on iPhone 14](https://raw.githubusercontent.com/nerdy-pro/flutter-adaptive-layout/v1.1.0/img/iphone_14.png) | ![flutter_adaptive_layout medium screen layout on iPad Mini](https://raw.githubusercontent.com/nerdy-pro/flutter-adaptive-layout/v1.1.0/img/ipad_mini.png) | ![flutter_adaptive_layout large screen layout on iPad Pro 12.9 inch](https://raw.githubusercontent.com/nerdy-pro/flutter-adaptive-layout/v1.1.0/img/ipad_12_inch.png) |
 
 ## Compatibility
 
